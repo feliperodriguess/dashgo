@@ -67,12 +67,14 @@ export default function Dashboard() {
             <Text fontSize="lg" mb="4">
               Inscritos da semana
             </Text>
+            {/*@ts-ignore TS complaning about options.xaxis.type but it's right*/}
             <Chart options={CHART_OPTIONS} series={CHART_SERIES} type="area" height={160} />
           </Box>
           <Box p="8" bg="gray.800" borderRadius={8}>
             <Text fontSize="lg" mb="4">
               Taxa de abertura
             </Text>
+            {/*@ts-ignore TS complaning about options.xaxis.type but it's right*/}
             <Chart options={CHART_OPTIONS} series={CHART_SERIES} type="area" height={160} />
           </Box>
         </SimpleGrid>
