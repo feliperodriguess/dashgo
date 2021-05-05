@@ -1,5 +1,6 @@
 export { BaseView } from './base-view'
 export { Header } from './header'
 export { Input } from './input'
+export { Pagination } from './pagination'
 export { Sidebar } from './sidebar'
 export { Table } from './table'

@@ -13,7 +13,18 @@ import {
 } from '@chakra-ui/react'
 import { RiPencilLine } from 'react-icons/ri'
 
-export function Table() {
+interface UserProps {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+interface TableProps {
+  users: UserProps[]
+}
+
+export function Table({ users }: TableProps) {
   return (
     <ChakraTable colorScheme="whiteAlpha">
       <Thead>
@@ -28,32 +39,35 @@ export function Table() {
       </Thead>
 
       <Tbody>
-        <Tr>
-          <Td px="6">
-            <Checkbox colorScheme="pink" />
-          </Td>
-          <Td>
-            <Box>
-              <Text fontWeight="bold">Felipe Rodrigues</Text>
-              <Text fontSize="sm" color="gray.300">
-                felipe.rodrigues@gmail.com
-              </Text>
-            </Box>
-          </Td>
-          <Td>04 de Abril, 2021</Td>
-          <Td>
-            <Button
-              as="a"
-              size="sm"
-              fontSize="sm"
-              colorScheme="purple"
-              leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-              cursor="pointer"
-            >
-              Editar
-            </Button>
-          </Td>
-        </Tr>
+        {users.map(user => (
+            <Tr key={user.id}>
+            <Td px="6">
+              <Checkbox colorScheme="pink" />
+            </Td>
+            <Td>
+              <Box>
+                <Text fontWeight="bold">{user.name}</Text>
+                <Text fontSize="sm" color="gray.300">
+                  {user.email}
+                </Text>
+              </Box>
+            </Td>
+            <Td>{user.createdAt}</Td>
+            <Td>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="purple"
+                leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                cursor="pointer"
+              >
+                Editar
+              </Button>
+            </Td>
+          </Tr>
+        ))}
+
       </Tbody>
     </ChakraTable>
   )
