@@ -5,17 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint './src/*.{js,jsx,ts,tsx}' --fix"
-    ]
+    "start": "next start",
+    "lint": "yarn eslint"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
