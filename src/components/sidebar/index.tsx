@@ -1,4 +1,4 @@
-import { Box, Icon, Link, Stack, Text } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { SidebarMenu } from './menu'
 import { SIDEBAR_MENUS } from './constants'
 
