@@ -1,9 +1,9 @@
 import { Button, Flex, HStack, Text } from '@chakra-ui/react'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, MouseEvent } from 'react'
 
 interface PaginationProps {
   currentPage: number
-  onPageClick: () => void
+  onPageClick: (event: MouseEvent) => void
   perPage?: number
   total: number
 }
@@ -43,18 +43,18 @@ export function Pagination({ currentPage, onPageClick, perPage = 10, total }: Pa
         {page}
       </Button>
     ),
-    [currentPage]
+    [onPageClick]
   )
 
   return (
     <Flex w="100%" align="center" justify="space-between">
       <Text color="gray.400">
         <Text fontWeight="bold" as="span">
-          {(currentPage - 1) * (perPage) + 1}
+          {(currentPage - 1) * perPage + 1}
         </Text>{' '}
         -{' '}
         <Text fontWeight="bold" as="span">
-          {currentPage === pages[pages.length -1] ? total  : currentPage * perPage}
+          {currentPage === pages[pages.length - 1] ? total : currentPage * perPage}
         </Text>{' '}
         de{' '}
         <Text fontWeight="bold" as="span">
