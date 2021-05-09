@@ -1,7 +1,6 @@
 import { SimpleGrid } from '@chakra-ui/react'
 
-import { BaseView } from '../../components'
-import { Chart } from './chart'
+import { BaseView, Chart } from '../../components'
 import { CHART_OPTIONS, CHART_SERIES } from './constants'
 
 export default function Dashboard() {

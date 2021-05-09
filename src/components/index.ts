@@ -1,4 +1,6 @@
+export { ActiveLink } from './active-link'
 export { BaseView } from './base-view'
+export { Chart } from './chart'
 export { Header } from './header'
 export { Input } from './input'
 export { Pagination } from './pagination'

@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState, MouseEvent } from 'react'
 import { BaseView, Pagination, Table } from '../../components'
 import { RiAddLine } from 'react-icons/ri'
 import { USERS_MOCK } from './constants'
+import Link from 'next/link'
 
 const PER_PAGE = 10
 export default function UsersList() {
@@ -27,16 +28,18 @@ export default function UsersList() {
           <Heading size="lg" fontWeight="normal" pl="4">
             Usuários
           </Heading>
-          <Button
-            as="a"
-            size="sm"
-            fontSize="sm"
-            colorScheme="pink"
-            leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-            cursor="pointer"
-          >
-            Criar novo
-          </Button>
+          <Link href="/users/create" passHref>
+            <Button
+              as="a"
+              size="sm"
+              fontSize="sm"
+              colorScheme="pink"
+              leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+              cursor="pointer"
+            >
+              Criar novo
+            </Button>
+          </Link>
         </Flex>
         <Table users={displayedUsers} />
         <Pagination
