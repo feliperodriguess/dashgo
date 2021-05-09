@@ -10,14 +10,15 @@ import {
   Td,
   Tr,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 import { RiPencilLine } from 'react-icons/ri'
 
 interface UserProps {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: string;
+  id: number
+  name: string
+  email: string
+  createdAt: string
 }
 
 interface TableProps {
@@ -25,23 +26,28 @@ interface TableProps {
 }
 
 export function Table({ users }: TableProps) {
+  const isDesktop = useBreakpointValue({
+    base: false,
+    lg: true,
+  })
+
   return (
     <ChakraTable colorScheme="whiteAlpha">
       <Thead>
         <Tr>
-          <Th px="6" color="gray.300" width="8">
+          <Th px={['4', '4', '6']} color="gray.300" width="8">
             <Checkbox colorScheme="pink" />
           </Th>
           <Th>Usuário</Th>
-          <Th>Data de cadastro</Th>
-          <Th w="8"></Th>
+          {isDesktop && <Th>Data de cadastro</Th>}
+          {isDesktop && <Th w="8"></Th>}
         </Tr>
       </Thead>
 
       <Tbody>
-        {users.map(user => (
-            <Tr key={user.id}>
-            <Td px="6">
+        {users.map((user) => (
+          <Tr key={user.id}>
+            <Td px={['4', '4', '6']}>
               <Checkbox colorScheme="pink" />
             </Td>
             <Td>
@@ -52,22 +58,23 @@ export function Table({ users }: TableProps) {
                 </Text>
               </Box>
             </Td>
-            <Td>{user.createdAt}</Td>
-            <Td>
-              <Button
-                as="a"
-                size="sm"
-                fontSize="sm"
-                colorScheme="purple"
-                leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                cursor="pointer"
-              >
-                Editar
-              </Button>
-            </Td>
+            {isDesktop && <Td>{user.createdAt}</Td>}
+            {isDesktop && (
+              <Td>
+                <Button
+                  as="a"
+                  size="sm"
+                  fontSize="sm"
+                  colorScheme="purple"
+                  leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                  cursor="pointer"
+                >
+                  Editar
+                </Button>
+              </Td>
+            )}
           </Tr>
         ))}
-
       </Tbody>
     </ChakraTable>
   )

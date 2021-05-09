@@ -12,7 +12,7 @@ const ApexChart = dynamic(() => import('react-apexcharts'), {
 
 export function Chart({ title, ...otherProps }) {
   return (
-    <Box p="8" bg="gray.800" borderRadius={8}>
+    <Box p={['6', '8']} bg="gray.800" borderRadius={8}>
       <Text fontSize="lg" mb="4">
         {title}
       </Text>

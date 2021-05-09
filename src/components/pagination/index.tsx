@@ -47,8 +47,8 @@ export function Pagination({ currentPage, onPageClick, perPage = 10, total }: Pa
   )
 
   return (
-    <Flex w="100%" align="center" justify="space-between">
-      <Text color="gray.400">
+    <Flex w="100%" direction={['column', 'row']} align="center" justify="space-between">
+      <Text mt="6">
         <Text fontWeight="bold" as="span">
           {(currentPage - 1) * perPage + 1}
         </Text>{' '}
@@ -62,7 +62,7 @@ export function Pagination({ currentPage, onPageClick, perPage = 10, total }: Pa
         </Text>
       </Text>
 
-      <HStack align="center" justify="center" mt="8" spacing="4">
+      <HStack align="center" justify="center" mt="6" spacing="4">
         {pages.map((page) => (page === currentPage ? renderCurrentPage : renderOtherPages(page)))}
       </HStack>
     </Flex>
