@@ -1,24 +1,30 @@
 import { Box, Button, Flex, Heading, Icon } from '@chakra-ui/react'
-import { useCallback, useMemo, useState, MouseEvent } from 'react'
+import { useCallback, useEffect, useMemo, useState, MouseEvent } from 'react'
 import { BaseView, Pagination, Table } from '../../components'
 import { RiAddLine } from 'react-icons/ri'
-import { USERS_MOCK } from './constants'
 import Link from 'next/link'
 
 const PER_PAGE = 10
 export default function UsersList() {
   const [currentPage, setCurrentPage] = useState(1)
+  const [users, setUsers] = useState([])
 
   const displayedUsers = useMemo(
     () =>
-      USERS_MOCK.filter(
+      users?.filter(
         (user, index) => index > (currentPage - 1) * PER_PAGE - 1 && index < currentPage * PER_PAGE
       ),
-    [currentPage]
+    [currentPage, users]
   )
 
   const onPageClick = useCallback((event: MouseEvent & { target: HTMLButtonElement }) => {
     setCurrentPage(Number(event.target.id))
+  }, [])
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/users')
+      .then((response) => response.json())
+      .then((response) => setUsers(response.users))
   }, [])
 
   return (
@@ -46,7 +52,7 @@ export default function UsersList() {
           currentPage={currentPage}
           onPageClick={onPageClick}
           perPage={PER_PAGE}
-          total={USERS_MOCK.length}
+          total={users?.length}
         />
       </Box>
     </BaseView>

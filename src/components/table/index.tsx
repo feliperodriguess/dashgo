@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { RiPencilLine } from 'react-icons/ri'
 
-interface UserProps {
+export interface UserProps {
   id: number
   name: string
   email: string
@@ -45,7 +45,7 @@ export function Table({ users }: TableProps) {
       </Thead>
 
       <Tbody>
-        {users.map((user) => (
+        {users?.map((user) => (
           <Tr key={user.id}>
             <Td px={['4', '4', '6']}>
               <Checkbox colorScheme="pink" />
