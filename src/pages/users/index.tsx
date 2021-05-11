@@ -1,13 +1,15 @@
-import { Box, Button, Flex, Heading, Icon } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState, MouseEvent } from 'react'
+import { Box, Button, Flex, Heading, Icon, Spinner, Text } from '@chakra-ui/react'
+import { useCallback, useMemo, useState, MouseEvent } from 'react'
 import { BaseView, Pagination, Table } from '../../components'
 import { RiAddLine } from 'react-icons/ri'
 import Link from 'next/link'
 
+import { useGetUsers } from '../../hooks/useGetUsers'
+
 const PER_PAGE = 10
 export default function UsersList() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [users, setUsers] = useState([])
+  const { data: users, isFetching, isLoading, error } = useGetUsers()
 
   const displayedUsers = useMemo(
     () =>
@@ -21,11 +23,35 @@ export default function UsersList() {
     setCurrentPage(Number(event.target.id))
   }, [])
 
-  useEffect(() => {
-    fetch('http://localhost:3000/api/users')
-      .then((response) => response.json())
-      .then((response) => setUsers(response.users))
-  }, [])
+  const renderTable = useMemo(() => {
+    if (isLoading) {
+      return (
+        <Flex height="100%" align="center" justify="center">
+          <Spinner />
+        </Flex>
+      )
+    }
+    if (error) {
+      return (
+        <Flex height="100%" align="center" justify="center">
+          <Text color="red.400" fontSize="sm" fontWeight="bold">
+            Falha ao obter dados dos usuários
+          </Text>
+        </Flex>
+      )
+    }
+    return (
+      <Box>
+        <Table users={displayedUsers} />
+        <Pagination
+          currentPage={currentPage}
+          onPageClick={onPageClick}
+          perPage={PER_PAGE}
+          total={users?.length}
+        />
+      </Box>
+    )
+  }, [currentPage, displayedUsers, error, isLoading, onPageClick, users])
 
   return (
     <BaseView>
@@ -33,6 +59,7 @@ export default function UsersList() {
         <Flex mb="8" justify="space-between" align="center">
           <Heading size="lg" fontWeight="normal" pl="4">
             Usuários
+            {!isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4" />}
           </Heading>
           <Link href="/users/create" passHref>
             <Button
@@ -47,13 +74,7 @@ export default function UsersList() {
             </Button>
           </Link>
         </Flex>
-        <Table users={displayedUsers} />
-        <Pagination
-          currentPage={currentPage}
-          onPageClick={onPageClick}
-          perPage={PER_PAGE}
-          total={users?.length}
-        />
+        {renderTable}
       </Box>
     </BaseView>
   )

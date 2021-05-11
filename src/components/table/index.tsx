@@ -13,16 +13,10 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 import { RiPencilLine } from 'react-icons/ri'
-
-export interface UserProps {
-  id: number
-  name: string
-  email: string
-  createdAt: string
-}
+import { User } from '../../utils/types'
 
 interface TableProps {
-  users: UserProps[]
+  users: User[]
 }
 
 export function Table({ users }: TableProps) {
