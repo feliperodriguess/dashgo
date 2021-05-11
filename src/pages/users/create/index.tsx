@@ -1,23 +1,25 @@
 import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { useMutation } from 'react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { REGEX } from '../../../utils/constants'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { BaseView, Input } from '../../../components'
-
-type CreateUserFormData = {
-  name: string
-  email: string
-  password: string
-  passwordConfirmation: string
-}
+import { CreateUserFormData } from '../../../utils/types'
+import * as usersServices from '../../../services/users'
+import { queryClient } from '../../../services/queryClient'
 
 export default function CreateUser() {
+  const router = useRouter()
+  const createUser = useMutation((user: CreateUserFormData) => usersServices.createUser(user), {
+    onSuccess: () => queryClient.invalidateQueries('users'),
+  })
   const { register, handleSubmit, formState, getValues } = useForm()
 
   const onCreateUser: SubmitHandler<CreateUserFormData> = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log(data)
+    await createUser.mutateAsync(data)
+    router.push('/users')
   }
 
   return (

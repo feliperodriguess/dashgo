@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Icon,
+  Link as ChakraLink,
   Table as ChakraTable,
   Tbody,
   Th,
@@ -12,8 +13,11 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react'
+import { useCallback } from 'react'
 import { RiPencilLine } from 'react-icons/ri'
 import { User } from '../../utils/types'
+import { queryClient } from '../../services/queryClient'
+import * as usersServices from '../../services/users'
 
 interface TableProps {
   users: User[]
@@ -24,6 +28,12 @@ export function Table({ users }: TableProps) {
     base: false,
     lg: true,
   })
+
+  const handlePrefetchUser = useCallback(async (userId: number) => {
+    await queryClient.prefetchQuery(['user', userId], () => usersServices.getUserById(userId), {
+      staleTime: 1000 * 60 * 10, //10 minutes
+    })
+  }, [])
 
   return (
     <ChakraTable colorScheme="whiteAlpha">
@@ -46,13 +56,18 @@ export function Table({ users }: TableProps) {
             </Td>
             <Td>
               <Box>
-                <Text fontWeight="bold">{user.name}</Text>
+                <ChakraLink
+                  color="purple.400"
+                  onMouseEnter={() => handlePrefetchUser(Number(user.id))}
+                >
+                  <Text fontWeight="bold">{user.name}</Text>
+                </ChakraLink>
                 <Text fontSize="sm" color="gray.300">
                   {user.email}
                 </Text>
               </Box>
             </Td>
-            {isDesktop && <Td>{user.createdAt}</Td>}
+            {isDesktop && <Td>{user.created_at}</Td>}
             {isDesktop && (
               <Td>
                 <Button
