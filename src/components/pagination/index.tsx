@@ -3,13 +3,31 @@ import { useCallback, useMemo, MouseEvent } from 'react'
 
 interface PaginationProps {
   currentPage: number
-  onPageClick: (event: MouseEvent) => void
+  onPageChange: (event: MouseEvent) => void
   perPage?: number
+  siblingsPagesCount?: number
   total: number
 }
 
-export function Pagination({ currentPage, onPageClick, perPage = 10, total }: PaginationProps) {
-  const pages = Array.from(Array(Math.ceil(total / perPage) + 1).keys()).filter(Boolean)
+function generatePagesArray(from: number, to: number) {
+  return [...new Array(to - from)].map((_, index) => from + index + 1).filter((page) => page > 0)
+}
+
+export function Pagination({
+  currentPage,
+  onPageChange,
+  perPage = 10,
+  siblingsPagesCount = 1,
+  total,
+}: PaginationProps) {
+  const lastPage = Math.ceil(total / perPage)
+  const pages = Array.from(Array(lastPage + 1).keys()).filter(Boolean)
+  const previousPages =
+    currentPage > 1 ? generatePagesArray(currentPage - 1 - siblingsPagesCount, currentPage - 1) : []
+  const nextPages =
+    currentPage < lastPage
+      ? generatePagesArray(currentPage, Math.min(currentPage + siblingsPagesCount, lastPage))
+      : []
 
   const renderCurrentPage = useMemo(
     () => (
@@ -38,12 +56,12 @@ export function Pagination({ currentPage, onPageClick, perPage = 10, total }: Pa
         width="4"
         bg="gray.700"
         _hover={{ bg: 'gray.500' }}
-        onClick={onPageClick}
+        onClick={onPageChange}
       >
         {page}
       </Button>
     ),
-    [onPageClick]
+    [onPageChange]
   )
 
   return (
@@ -63,7 +81,22 @@ export function Pagination({ currentPage, onPageClick, perPage = 10, total }: Pa
       </Text>
 
       <HStack align="center" justify="center" mt="6" spacing="4">
-        {pages.map((page) => (page === currentPage ? renderCurrentPage : renderOtherPages(page)))}
+        {currentPage > 1 + siblingsPagesCount && renderOtherPages(1)} {/* First Page */}
+        {currentPage > 2 + siblingsPagesCount && (
+          <Text color="gray.300" w="6" textAlign="center">
+            ...
+          </Text>
+        )}
+        {previousPages?.map((page) => renderOtherPages(page))} {/* Left Siblings Pages */}
+        {renderCurrentPage} {/* Current Page */}
+        {nextPages?.map((page) => renderOtherPages(page))} {/* Right Siblings Pages */}
+        {currentPage + 1 + siblingsPagesCount < lastPage && (
+          <Text color="gray.300" w="6" textAlign="center">
+            ...
+          </Text>
+        )}
+        {currentPage + siblingsPagesCount < lastPage && renderOtherPages(lastPage)}
+        {/* Last Page ⬆ */}
       </HStack>
     </Flex>
   )

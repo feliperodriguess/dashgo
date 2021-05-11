@@ -1,9 +1,14 @@
 import { api } from '../services/api'
 import { User } from '../utils/types'
 
-export const getUsers = async (): Promise<User[]> => {
-  const response = await api.get('/users')
-  const users = response.data.users.map((user: User) => ({
+type GetUsersResponse = {
+  totalCount: number
+  users: User[]
+}
+
+export const getUsers = async (page: number): Promise<GetUsersResponse> => {
+  const { data, headers } = await api.get('/users', { params: { page } })
+  const users = data.users.map((user: User) => ({
     ...user,
     createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -11,5 +16,6 @@ export const getUsers = async (): Promise<User[]> => {
       year: 'numeric',
     }),
   }))
-  return users
+  const totalCount = Number(headers['x-total-count'])
+  return { users, totalCount }
 }

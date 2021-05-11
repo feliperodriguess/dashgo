@@ -9,17 +9,9 @@ import { useGetUsers } from '../../hooks/useGetUsers'
 const PER_PAGE = 10
 export default function UsersList() {
   const [currentPage, setCurrentPage] = useState(1)
-  const { data: users, isFetching, isLoading, error } = useGetUsers()
+  const { data, isFetching, isLoading, error } = useGetUsers(currentPage)
 
-  const displayedUsers = useMemo(
-    () =>
-      users?.filter(
-        (user, index) => index > (currentPage - 1) * PER_PAGE - 1 && index < currentPage * PER_PAGE
-      ),
-    [currentPage, users]
-  )
-
-  const onPageClick = useCallback((event: MouseEvent & { target: HTMLButtonElement }) => {
+  const onPageChange = useCallback((event: MouseEvent & { target: HTMLButtonElement }) => {
     setCurrentPage(Number(event.target.id))
   }, [])
 
@@ -42,16 +34,16 @@ export default function UsersList() {
     }
     return (
       <Box>
-        <Table users={displayedUsers} />
+        <Table users={data?.users} />
         <Pagination
           currentPage={currentPage}
-          onPageClick={onPageClick}
+          onPageChange={onPageChange}
           perPage={PER_PAGE}
-          total={users?.length}
+          total={data?.totalCount}
         />
       </Box>
     )
-  }, [currentPage, displayedUsers, error, isLoading, onPageClick, users])
+  }, [currentPage, data, error, isLoading, onPageChange])
 
   return (
     <BaseView>
